@@ -4,7 +4,7 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.{DataFrame, Row, SaveMode, SparkSession}
 
 /**
-  * 使用Spark完成我们的数据清洗操作
+  * 使用Spark完成我们的数据清洗操作 呵呵
   */
 object SparkStatCleanJob {
 
