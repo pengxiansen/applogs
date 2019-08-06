@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="analysis" />
+        <module name="applogserver" />
+        <module name="common" />
+        <module name="dataprocessing" />
+        <module name="hive_time_utils" />
+        <module name="ImoocSparkSQL" />
+        <module name="mock" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="applogs" target="1.8" />
+      <module name="flume-taildir-source" target="1.8" />
+      <module name="taildidSource" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
