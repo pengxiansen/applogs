@@ -19,12 +19,12 @@ object TopNStatJobYARN {
     }
 
     val Array(inputPath, day) = args
-    val spark = SparkSession.builder()
+    val spark: SparkSession = SparkSession.builder()
       .config("spark.sql.sources.partitionColumnTypeInference.enabled","false")
       .getOrCreate()
 
 
-    val accessDF = spark.read.format("parquet").load(inputPath)
+    val accessDF: DataFrame = spark.read.format("parquet").load(inputPath)
 
     StatDAO.deleteData(day)
 

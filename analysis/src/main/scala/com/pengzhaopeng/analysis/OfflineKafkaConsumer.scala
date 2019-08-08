@@ -13,4 +13,8 @@ object OfflineKafkaConsumer {
 
   //消费者迭代器，从消息流中获取数据
 
+  def main(args: Array[String]): Unit = {
+
+  }
+
 }
