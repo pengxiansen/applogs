@@ -32,13 +32,13 @@ object TopNStatJob2 {
     StatDAO.deleteData(day)
 
     //最受欢迎的TopN课程
-    //    videoAccessTopNStat(spark, commonDF)
+    videoAccessTopNStat(spark, commonDF)
 
     //按照地市进行统计TopN课程
     cityAccessTopNStat(spark, commonDF)
 
     //按照流量进行统计
-    //    videoTrafficsTopNStat(spark, commonDF)
+    videoTrafficsTopNStat(spark, commonDF)
 
     commonDF.unpersist(true)
 
@@ -51,16 +51,22 @@ object TopNStatJob2 {
   def videoTrafficsTopNStat(spark: SparkSession, commonDF: DataFrame): Unit = {
     import spark.implicits._
 
-    val cityAccessTopNDF = commonDF.groupBy("day", "cmsId")
-      .agg(sum("traffic").as("traffics"))
-      .orderBy($"traffics".desc)
-    //.show(false)
+    //    val cityAccessTopNDF = commonDF.groupBy("day", "cmsId")
+    //      .agg(sum("traffic").as("traffics"))
+    //      .orderBy($"traffics".desc)
+    //    //.show(false)
+
+    commonDF.createOrReplaceTempView("video_traffic_top")
+    val videoTrafficsTopNDF: DataFrame = spark.sql("select day,cmsId,sum(traffic) traffics from video_traffic_top " +
+      "group by day, cmsId order by traffics desc")
+
+    //    videoTrafficsTopNDF.show(false)
 
     /**
       * 将统计结果写入到MySQL中
       */
     try {
-      cityAccessTopNDF.foreachPartition(partitionOfRecords => {
+      videoTrafficsTopNDF.foreachPartition(partitionOfRecords => {
         val list = new ListBuffer[DayVideoTrafficsStat]
 
         partitionOfRecords.foreach(info => {
@@ -91,15 +97,15 @@ object TopNStatJob2 {
 
     //Window函数在Spark SQL的使用
 
-    //    val top3DF = cityAccessTopNDF.select(
-    //      cityAccessTopNDF("day"),
-    //      cityAccessTopNDF("city"),
-    //      cityAccessTopNDF("cmsId"),
-    //      cityAccessTopNDF("times"),
-    //      row_number().over(Window.partitionBy(cityAccessTopNDF("city"))
-    //        .orderBy(cityAccessTopNDF("times").desc)
-    //      ).as("times_rank")
-    //    ).filter("times_rank <=3") //.show(false)  //Top3
+    //        val top3DF = cityAccessTopNDF.select(
+    //          cityAccessTopNDF("day"),
+    //          cityAccessTopNDF("city"),
+    //          cityAccessTopNDF("cmsId"),
+    //          cityAccessTopNDF("times"),
+    //          row_number().over(Window.partitionBy(cityAccessTopNDF("city"))
+    //            .orderBy(cityAccessTopNDF("times").desc)
+    //          ).as("times_rank")
+    //        ).filter("times_rank <=3") //.show(false)  //Top3
 
     commonDF.createOrReplaceTempView("city_top_stat")
     val top3DF: DataFrame = spark.sql("select * from " +
@@ -107,30 +113,30 @@ object TopNStatJob2 {
       "from (select day,city,cmsId, count(1) as times from city_top_stat group by day, city,cmsId )t1 " +
       ")t2 where times_rank <= 3")
 
-//    top3DF.show(false)
+    //    top3DF.show(false)
 
 
-        /**
-          * 将统计结果写入到MySQL中
-          */
-        try {
-          top3DF.foreachPartition(partitionOfRecords => {
-            val list = new ListBuffer[DayCityVideoAccessStat]
+    /**
+      * 将统计结果写入到MySQL中
+      */
+    try {
+      top3DF.foreachPartition(partitionOfRecords => {
+        val list = new ListBuffer[DayCityVideoAccessStat]
 
-            partitionOfRecords.foreach(info => {
-              val day = info.getAs[String]("day")
-              val cmsId = info.getAs[Long]("cmsId")
-              val city = info.getAs[String]("city")
-              val times = info.getAs[Long]("times")
-              val timesRank = info.getAs[Int]("times_rank")
-              list.append(DayCityVideoAccessStat(day, cmsId, city, times, timesRank))
-            })
+        partitionOfRecords.foreach(info => {
+          val day = info.getAs[String]("day")
+          val cmsId = info.getAs[Long]("cmsId")
+          val city = info.getAs[String]("city")
+          val times = info.getAs[Long]("times")
+          val timesRank = info.getAs[Int]("times_rank")
+          list.append(DayCityVideoAccessStat(day, cmsId, city, times, timesRank))
+        })
 
-            StatDAO.insertDayCityVideoAccessTopN(list)
-          })
-        } catch {
-          case e: Exception => e.printStackTrace()
-        }
+        StatDAO.insertDayCityVideoAccessTopN(list)
+      })
+    } catch {
+      case e: Exception => e.printStackTrace()
+    }
 
   }
 
