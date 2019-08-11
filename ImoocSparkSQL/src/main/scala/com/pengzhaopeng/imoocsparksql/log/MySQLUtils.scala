@@ -11,7 +11,7 @@ object MySQLUtils {
    * 获取数据库连接
    */
   def getConnection() = {
-    DriverManager.getConnection("jdbc:mysql://hadoop01:3306/imooc_project?useUnicode=true&characterEncoding=utf-8&user=root&password=123456aa")
+    DriverManager.getConnection("jdbc:mysql://cdh01:3306/imooc_project?useUnicode=true&characterEncoding=utf-8&user=root&password=123456a")
   }
 
   /**

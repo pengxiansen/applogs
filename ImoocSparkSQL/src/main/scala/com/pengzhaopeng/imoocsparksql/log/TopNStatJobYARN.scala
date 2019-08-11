@@ -2,7 +2,7 @@ package com.pengzhaopeng.imoocsparksql.log
 
 import org.apache.spark.sql.expressions.Window
 import org.apache.spark.sql.functions._
-import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.sql.{DataFrame, Dataset, Row, SparkSession}
 
 import scala.collection.mutable.ListBuffer
 
@@ -46,7 +46,7 @@ object TopNStatJobYARN {
   def videoTrafficsTopNStat(spark: SparkSession, accessDF:DataFrame, day:String): Unit = {
     import spark.implicits._
 
-    val cityAccessTopNDF = accessDF.filter($"day" === day && $"cmsType" === "video")
+    val cityAccessTopNDF: Dataset[Row] = accessDF.filter($"day" === day && $"cmsType" === "video")
     .groupBy("day","cmsId").agg(sum("traffic").as("traffics"))
     .orderBy($"traffics".desc)
     //.show(false)

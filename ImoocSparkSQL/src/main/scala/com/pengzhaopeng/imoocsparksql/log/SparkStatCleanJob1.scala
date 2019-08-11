@@ -15,10 +15,13 @@ object SparkStatCleanJob1 {
     }
 
     val Array(inputPath, outputPath) = args
+//    val inputPath = "file:///D:/test/input/access*"
+//    val outputPath = "file:///D:/test/output/"
 
     val spark: SparkSession = SparkSession
       .builder()
       .config("spark.sql.parquet.compression.codec", "gzip")
+      .master("local[2]")
       .getOrCreate()
 
     val accessRDD: RDD[String] = spark.sparkContext.textFile(inputPath)
@@ -58,7 +61,7 @@ object SparkStatCleanJob1 {
     //    accessDF.show(false)
 
     accessDF
-      .coalesce(1)
+//      .coalesce(1)
       .write
       .format("parquet")
       .mode(SaveMode.Overwrite)
