@@ -15,18 +15,21 @@
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
             <version>2.11.8</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-core_2.11</artifactId>
             <version>2.2.0</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-sql_2.11</artifactId>
             <version>2.2.0</version>
+            <scope>provided</scope>
         </dependency>
 
         <!--ip地址解析库-->
@@ -59,6 +62,7 @@
 
     </dependencies>
 
+    <!-- 声明构建信息 -->
     <build>
         <!-- 声明并引入子项目共有的插件【插件就是附着到Maven各个声明周期的具体实现】 -->
         <plugins>
@@ -95,6 +99,11 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.0.0</version>
                 <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass></mainClass>
+                        </manifest>
+                    </archive>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
@@ -110,5 +119,6 @@
                 </executions>
             </plugin>
         </plugins>
+
     </build>
 </project>

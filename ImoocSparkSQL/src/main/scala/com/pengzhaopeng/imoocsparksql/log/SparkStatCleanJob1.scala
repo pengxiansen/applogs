@@ -21,7 +21,7 @@ object SparkStatCleanJob1 {
     val spark: SparkSession = SparkSession
       .builder()
       .config("spark.sql.parquet.compression.codec", "gzip")
-      .master("local[2]")
+//      .master("local[2]")
       .getOrCreate()
 
     val accessRDD: RDD[String] = spark.sparkContext.textFile(inputPath)
