@@ -20,7 +20,7 @@ object SparkStatCleanJob1 {
 
     val spark: SparkSession = SparkSession
       .builder()
-      .config("spark.sql.parquet.compression.codec", "gzip")
+//      .config("spark.sql.parquet.compression.codec", "gzip")
 //      .master("local[2]")
       .getOrCreate()
 

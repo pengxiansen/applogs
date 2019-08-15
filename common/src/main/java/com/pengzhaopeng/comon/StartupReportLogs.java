@@ -1,5 +1,7 @@
 package com.pengzhaopeng.comon;
 
+import java.io.Serializable;
+
 /**
  * 启动日志
  */

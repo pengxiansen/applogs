@@ -156,9 +156,9 @@ object TopNStatJobYARN {
         val list = new ListBuffer[DayVideoAccessStat]
 
         partitionOfRecords.foreach(info => {
-          val day = info.getAs[String]("day")
-          val cmsId = info.getAs[Long]("cmsId")
-          val times = info.getAs[Long]("times")
+          val day: String = info.getAs[String]("day")
+          val cmsId: Long = info.getAs[Long]("cmsId")
+          val times: Long = info.getAs[Long]("times")
 
           list.append(DayVideoAccessStat(day, cmsId, times))
         })

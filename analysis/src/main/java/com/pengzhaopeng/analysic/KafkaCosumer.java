@@ -2,6 +2,7 @@ package com.pengzhaopeng.analysic;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.pengzhaopeng.comon.StartupReportLogs;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
@@ -116,6 +117,7 @@ public class KafkaCosumer {
                 if (value != null && !value.isEmpty()) {
                     JSONObject jsonObject = JSON.parseObject(value);
                     Integer type = jsonObject.getInteger("type");
+
 
                     //收集一分钟的数据后更换目录
                     if (System.currentTimeMillis() - lastTime > 1000 * 60) {
