@@ -12,14 +12,13 @@ import org.apache.hadoop.hbase.client.Table;
 import java.io.IOException;
 import java.util.Properties;
 
-public class HBaseClient
-{
+public class HBaseClient {
     private static Log log = LogFactory.getLog(HBaseClient.class);
 
     private static HBaseClient instance = null;
     private Connection connection;
 
-    private HBaseClient(){
+    private HBaseClient() {
     }
 
     public static HBaseClient getInstance(Properties props) {
@@ -81,8 +80,7 @@ public class HBaseClient
         return connection;
     }
 
-    public void close()
-    {
+    public void close() {
         if (connection != null && !connection.isClosed()) {
             try {
                 connection.close();
